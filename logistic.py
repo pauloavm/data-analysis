@@ -4,6 +4,11 @@ import pandas as pd
 import geopy
 from geopy.distance import geodesic
 import folium
+import googlemaps
+
+# Cria um cliente do Google Maps Places
+api_key = "SUA_CHAVE_DE_API_DO_GOOGLE_MAPS"  # Substitua por sua chave de API
+client = googlemaps.Client(api_key)
 
 # Cria uma função para adicionar manualmente os endereços
 def add_manual_addresses():
@@ -14,6 +19,13 @@ def add_manual_addresses():
     for i in range(num_addresses):
         address = st.text_input(f"Endereço {i+1}", placeholder="Digite um endereço")
         if address:
+            # Usa a API do Google Maps Places para obter sugestões de autocompletar
+            autocomplete_results = client.autocomplete(address)
+            
+            # Extrai o endereço formatado da primeira sugestão
+            if autocomplete_results:
+                address = autocomplete_results[0]["description"]
+            
             addresses.append(address)
     
     # Cria o botão para adicionar mais linhas de inserção
@@ -21,6 +33,13 @@ def add_manual_addresses():
         num_addresses += 1
         address = st.text_input(f"Endereço {num_addresses}", placeholder="Digite um endereço")
         if address:
+            # Usa a API do Google Maps Places para obter sugestões de autocompletar
+            autocomplete_results = client.autocomplete(address)
+            
+            # Extrai o endereço formatado da primeira sugestão
+            if autocomplete_results:
+                address = autocomplete_results[0]["description"]
+            
             addresses.append(address)
     
     return addresses
